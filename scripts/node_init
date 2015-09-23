@@ -1,0 +1,16 @@
+#! /bin/sh
+
+# 指定しているバージョンは2015/09/23時点のの最新バージョン
+# nodebrewのインストール
+curl -L git.io/nodebrew | perl - setup
+
+# nodebrewにパスを通す
+echo 'export PATH=$HOME/.nodebrew/current/bin:$PATH' >> ~/.zshrc
+source ~/.zshrc
+
+# Node.jsをインストール
+nodebrew install-binary v4.1.1
+nodebrew use v4.1.1
+
+# npmを最新版にする
+npm update -g npm@3.3.3
