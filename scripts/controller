@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# controller的なもの追加
+echo "
+var express = require('express');
+var router = express.Router();
+
+router.all('/', function(req, res, next) {
+  res.render('$1/index', { title: '$1' });
+});
+module.exports = router;
+" > ./routes/$1.js
+
+# view的なもの追加
+mkdir ./views/$1
+echo "
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+  </body>
+</html>
+" > ./views/$1/index.ejs
+
+# controllerの追加を設定に追加
+sed -i -e "/var routes = require('.\/routes\/index');/a var $1 = require('./routes/$1');" app.js
+sed -i -e "/app.use('\/', routes);/a app.use('/$1', $1);" app.js
