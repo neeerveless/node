@@ -5,9 +5,20 @@ exports.socketIoListen = function(http) {
 
     console.log('connection', socket.id);
 
-    socket.on('send', function(data) {
+    socket.on('all', function(data) {
       var message = data.message;
-      io.sockets.emit('push', message);
+      io.sockets.emit('all', message);
+    });
+
+    socket.on('join', function(data) {
+      var roomName = data.roomName;
+      socket.join(roomName);
+    });
+
+    socket.on('room', function(data) {
+      var roomName = data.roomName;
+      var message = data.message;
+      io.sockets.to(roomName).emit('room', message);
     });
 
     socket.on("disconnect", function() {

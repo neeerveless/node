@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>lobby</title>
+  <title><%= roomName %></title>
     <link rel="stylesheet" type="text/css" charset="utf-8" href="../public/stylesheets/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script>
-        var socket = io.connect();
+      var socket = io.connect();
       $(function() {
+        socket.on('room', function(data){
+          $('#room').append($('<li>').text(data));
+        });
+
         socket.on('all', function(data){
           $('#all').append($('<li>').text(data));
         });
-        
       });
       
       function send() {
         var str = $('#msg').val();
         if (str != '') {
-          socket.emit('all', { message: str });
+          socket.emit('room', { roomName: "<%= roomName %>", message: str });
         }
         $('#msg').val('');
       }
+
+      socket.emit('join', { roomName: "<%= roomName %>" });
     </script>
   </head>
   <body>
     <input type="text" id="msg">
     <input type="button" value="send" onClick="send()">
-    <ul id="all"></ul>
+    <table>
+      <td><ul id="room"></ul></td>
+      <td><ul id="all"></ul></td>
+    </table>
   </body>
 </html>
