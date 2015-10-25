@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var sample = express();
 
-router.param('arg', function(req, res, next, id) {
+router.param('arg', function(req, res, next) {
   sample.set('chained', 'chained');
   next();
 });
