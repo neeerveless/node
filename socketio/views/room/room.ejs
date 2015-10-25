@@ -8,12 +8,14 @@
     <script>
       var socket = io.connect();
       $(function() {
-        socket.on('room', function(data){
-          $('#room').append($('<li>').text(data));
-        });
-
-        socket.on('all', function(data){
-          $('#all').append($('<li>').text(data));
+        socket.on('message', function(data){
+          tr = $('<tr>')
+          .append('<td>' + data.nickName + '</td>')
+          .append('<td> >> </td>')
+          .append('<td>' + data.message + '</td>')
+          .append('<td>' + data.time + '</td>');
+          tbody = $('<tbody>').append(tr);
+          $('table').append(tbody);
         });
       });
       
@@ -25,15 +27,12 @@
         $('#msg').val('');
       }
 
-      socket.emit('join', { roomName: "<%= roomName %>" });
+      socket.emit('join', { roomName: "<%= roomName %>", nickName: "<%= nickName %>" });
     </script>
   </head>
   <body>
     <input type="text" id="msg">
     <input type="button" value="send" onClick="send()">
-    <table>
-      <td><ul id="room"></ul></td>
-      <td><ul id="all"></ul></td>
-    </table>
+    <table></table>
   </body>
 </html>
