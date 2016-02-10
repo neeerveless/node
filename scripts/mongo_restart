@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sudo mongod --config /etc/mongod.conf --repair
+sudo chown -R mongod:mongod /var/lib/mongo
+sudo service mongod restart

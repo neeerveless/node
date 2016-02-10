@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# model/ がなければ作成
+if [ ! -e model ]; then
+  mkdir model
+fi
+
+if [ -e model/$1 ]; then
+  exit
+fi
+
+ucName=${1^}
+schemaName="${1}Schema"
+# ○○.jsがなければ作成
+echo "var mongoose = require('mongoose');
+var schema = mongoose.Schema;
+
+var $schemaName = schema({
+
+});
+
+module.exports = mongoose.model('$ucName', $schemaName);
+" > ./model/$1.js
+
+is_connected=$(grep "var mongoose = require('mongoose');" app.js)
+if [ $is_connected ]; then
+  exit
+fi
+
+# mongoDBに接続する設定を追加
+sed -i -e "/var bodyParser = require('body-parser');/a var mongoose = require('mongoose');" app.js
+sed -i -e "/var app = express();/a var db = mongoose.connect('mongodb:\/\/localhosta\/express');" app.js

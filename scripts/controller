@@ -1,8 +1,7 @@
 #!/bin/sh
 
 # controller的なもの追加
-echo "
-var express = require('express');
+echo "var express = require('express');
 var router = express.Router();
 
 router.all('/', function(req, res, next) {
@@ -13,8 +12,7 @@ module.exports = router;
 
 # view的なもの追加
 mkdir ./views/$1
-echo "
-<!DOCTYPE html>
+echo "<!DOCTYPE html>
 <html>
   <head>
     <title><%= title %></title>
